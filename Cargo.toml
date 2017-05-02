@@ -1,0 +1,6 @@
+[package]
+name = "todayTmp"
+version = "0.1.0"
+authors = ["Marcin Siwak"]
+
+[dependencies]
