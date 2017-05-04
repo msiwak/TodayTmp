@@ -1,6 +1,7 @@
 [package]
-name = "todayTmp"
-version = "0.1.0"
-authors = ["Marcin Siwak"]
+name = "ttmp"
+version = "0.1.0-dev"
+authors = ["Marcin Siwak <marcin.siwak@gmail.com>"]
 
 [dependencies]
+chrono = "0.3.1"
