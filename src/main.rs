@@ -3,28 +3,32 @@ extern crate chrono;
 use chrono::prelude::*;
 use std::io;
 use std::fs;
+use std::os::unix::fs::symlink;
 use std::path::{Path, PathBuf};
 
 struct Options {
-    pub tmp_dir: String,
-    pub dir_path: PathBuf
+    pub dir_path: PathBuf,
+    pub today_link_path: PathBuf,
 }
 
 fn main() {
     let options = prepare();
-    if dir_exists(&options) {
+    if path_exists(&options.dir_path) {
         // Todo: go to directory
     } else {
         create_dir(&options);
+        create_link(&options);
     }
 }
 
 fn prepare() -> Options {
     let mut home_dir = get_home_dir();
     home_dir.push("tmp");
+    let mut link_path = home_dir.clone();
+    link_path.push("today");
     let mut options = Options {
-        tmp_dir: String::new(),
         dir_path: home_dir,
+        today_link_path: link_path,
     };
     let now = Local::now();
     let today_path = format!("{}/{}/{}/", now.year(), add_zero(now.month().to_string()),
@@ -33,8 +37,8 @@ fn prepare() -> Options {
     options
 }
 
-fn dir_exists(opt: &Options) -> bool {
-    Path::new(&opt.dir_path).exists()
+fn path_exists(path_buf: &PathBuf) -> bool {
+    Path::new(&path_buf).exists()
 }
 
 fn add_zero(value: String) -> String {
@@ -62,5 +66,23 @@ fn create_dir(opt: &Options) {
     match result {
         Ok(_) => {},
         Err(_) => { }
+    }
+}
+
+fn create_link(opt: &Options) {
+    let link_path = &opt.today_link_path.as_path();
+    let mut result: io::Result<()>;
+    if path_exists(&opt.today_link_path) {
+        result = fs::remove_file(link_path);
+        match result {
+            Ok(_) => {},
+            Err(_) => { }
+        }
+    }
+
+    result = symlink(&opt.dir_path, link_path);
+    match result {
+        Ok(_) => {},
+        Err(_) => {}
     }
 }
