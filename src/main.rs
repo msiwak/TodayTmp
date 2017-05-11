@@ -19,6 +19,7 @@ fn main() {
         create_dir(&options);
         create_link(&options);
     }
+    println!("{}", &options.today_link_path.as_path().display());
 }
 
 fn prepare() -> Options {
