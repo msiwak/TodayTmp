@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.0 - 2017-05-11:
+## v0.1.0 - TBA:
 
 * [![](changelog/img/1.png)](https://github.com/msiwak/TodayTmp/issues/1) - create tmp directory with one command
 * [![](changelog/img/3.png)](https://github.com/msiwak/TodayTmp/issues/3) - create `today` link pointing to today's directory

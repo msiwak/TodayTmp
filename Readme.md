@@ -2,6 +2,8 @@
 
 # TodayTmp
 
+[Changelog](Changelog.md)
+
 ## Description
 
 This tool is created because of my laziness ;)
