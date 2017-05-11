@@ -5,6 +5,10 @@ rust:
     - 1.16.0
     - beta
     - nightly
+os:
+    - osx
+    - linux
+    
 matrix:
     allow_failures:
         - rust: nightly
