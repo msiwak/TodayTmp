@@ -1,0 +1,10 @@
+language: rust
+cache: cargo
+rust:
+    - stable
+    - 1.16.0
+    - beta
+    - nightly
+matrix:
+    allow_failures:
+        - rust: nightly

@@ -32,7 +32,9 @@ fn prepare() -> Options {
         today_link_path: link_path,
     };
     let now = Local::now();
-    let today_path = format!("{}/{}/{}/", now.year(), add_zero(now.month().to_string()),
+    let today_path = format!("{}/{}/{}/",
+                             now.year(),
+                             add_zero(now.month().to_string()),
                              add_zero(now.day().to_string()));
     options.dir_path.push(today_path);
     options
@@ -55,7 +57,7 @@ fn add_zero(value: String) -> String {
 fn get_home_dir() -> PathBuf {
     let dir: PathBuf = match std::env::home_dir() {
         Some(path) => PathBuf::from(path),
-        None => PathBuf::from("")
+        None => PathBuf::from(""),
     };
     dir
 }
@@ -65,8 +67,8 @@ fn create_dir(opt: &Options) {
     let dir = dir.as_path();
     let result: io::Result<()> = fs::create_dir_all(dir);
     match result {
-        Ok(_) => {},
-        Err(_) => { }
+        Ok(_) => {}
+        Err(_) => {}
     }
 }
 
@@ -76,14 +78,14 @@ fn create_link(opt: &Options) {
     if path_exists(&opt.today_link_path) {
         result = fs::remove_file(link_path);
         match result {
-            Ok(_) => {},
-            Err(_) => { }
+            Ok(_) => {}
+            Err(_) => {}
         }
     }
 
     result = symlink(&opt.dir_path, link_path);
     match result {
-        Ok(_) => {},
+        Ok(_) => {}
         Err(_) => {}
     }
 }
