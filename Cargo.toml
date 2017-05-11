@@ -1,6 +1,6 @@
 [package]
 name = "ttmp"
-version = "0.1.0-dev"
+version = "0.1.0-alpha"
 authors = ["Marcin Siwak <marcin.siwak@gmail.com>"]
 
 [dependencies]
