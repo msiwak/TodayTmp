@@ -1,5 +1,6 @@
 #![warn(missing_docs)]
 #![deny(unsafe_code)]
+
 extern crate chrono;
 
 use chrono::prelude::*;
