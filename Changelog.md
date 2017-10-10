@@ -1,8 +1,8 @@
-# Changelog
+## Changelog
 
-## v0.1.0 - 09-10-2017:
+### 0.1.0 [09-10-2017]:
 
-### Features
+#### :star2: New features
 
 - create tmp directory with one command
 - create `today` link pointing to today's directory
