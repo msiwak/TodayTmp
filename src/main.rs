@@ -1,5 +1,15 @@
 #![warn(missing_docs)]
 #![deny(unsafe_code)]
+//! `TodayTmp`
+//!
+//! Application for automating create a temporary directory according current day with creating nice
+//! symlink. Result of the program is a path to temporary directory which can be evaluated by
+//! shell.
+//!
+//! To see usage, please read Readme.md file in source root. There are also installation
+//! instructions.
+//!
+//!
 
 extern crate chrono;
 
@@ -16,11 +26,14 @@ struct Options {
 
 fn main() {
     let options = prepare();
-    if path_exists(&options.dir_path) {
-        // Todo: go to directory
-    } else {
-        create_dir(&options);
-        create_link(&options);
+    if !path_exists(&options.dir_path) {
+        match new_day(&options) {
+            Ok(_) => {}
+            Err(_) => {
+                eprintln!("Error occurred during IO operations.");
+                std::process::exit(1);
+            }
+        }
     }
     println!("{}", &options.today_link_path.as_path().display());
 }
@@ -35,10 +48,12 @@ fn prepare() -> Options {
         today_link_path: link_path,
     };
     let now = Local::now();
-    let today_path = format!("{}/{}/{}/",
-                             now.year(),
-                             add_zero(now.month().to_string()),
-                             add_zero(now.day().to_string()));
+    let today_path = format!(
+        "{}/{}/{}/",
+        now.year(),
+        add_zero(&now.month().to_string()),
+        add_zero(&now.day().to_string())
+    );
     options.dir_path.push(today_path);
     options
 }
@@ -47,48 +62,39 @@ fn path_exists(path_buf: &PathBuf) -> bool {
     Path::new(&path_buf).exists()
 }
 
-fn add_zero(value: String) -> String {
+fn add_zero(value: &str) -> String {
     let mut result = String::with_capacity(2);
 
     if value.len() == 1 {
         result.push('0')
     }
-    result.push_str(value.as_str());
+    result.push_str(value);
     result
 }
 
 fn get_home_dir() -> PathBuf {
-    let dir: PathBuf = match std::env::home_dir() {
+    match std::env::home_dir() {
         Some(path) => PathBuf::from(path),
         None => PathBuf::from(""),
-    };
-    dir
+    }
 }
 
-fn create_dir(opt: &Options) {
+fn create_dir(opt: &Options) -> io::Result<()> {
     let dir = &opt.dir_path;
     let dir = dir.as_path();
-    let result: io::Result<()> = fs::create_dir_all(dir);
-    match result {
-        Ok(_) => {}
-        Err(_) => {}
-    }
+    fs::create_dir_all(dir)
 }
 
-fn create_link(opt: &Options) {
+fn create_link(opt: &Options) -> io::Result<()> {
     let link_path = &opt.today_link_path.as_path();
-    let mut result: io::Result<()>;
     if path_exists(&opt.today_link_path) {
-        result = fs::remove_file(link_path);
-        match result {
-            Ok(_) => {}
-            Err(_) => {}
-        }
+        fs::remove_file(link_path)?;
     }
 
-    result = symlink(&opt.dir_path, link_path);
-    match result {
-        Ok(_) => {}
-        Err(_) => {}
-    }
+    symlink(&opt.dir_path, link_path)
+}
+
+fn new_day(opt: &Options) -> io::Result<()> {
+    create_dir(opt)?;
+    create_link(opt)
 }

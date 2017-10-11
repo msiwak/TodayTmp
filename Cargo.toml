@@ -4,4 +4,4 @@ version = "0.2.0-dev"
 authors = ["Marcin Siwak <marcin.siwak@gmail.com>"]
 
 [dependencies]
-chrono = "0.3.1"
+chrono = "0.4.6"
